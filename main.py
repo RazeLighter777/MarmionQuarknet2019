@@ -6,6 +6,7 @@
 #
 import pygame 
 
+from time import sleep
 from joystick import JoystickReader
 from motorarray import MotorArray	
 #This function marks the initial starting point for the program
@@ -19,9 +20,14 @@ def main():
 
 	#create the joystick reader
 	joy = JoystickReader()
-
-	while 1:
-
+        
+        while True:
+            counter = 0
+	    while True:
+                counter += 1
+                if ((counter % 10) == 0):
+                    if (joy.tryConnect() == False):
+                        break
 		pygame.event.get()
 		
 		print(joy.getAxis(0))
@@ -47,8 +53,8 @@ def main():
 			motors.switchOn(4)
 		else:
 			motors.switchOff(4)	
-
-		
+                sleep(0.05)
+	    print("Disconnect!!")
 
 #call the main function	
 main()

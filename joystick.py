@@ -8,11 +8,26 @@ import pygame
 
 class JoystickReader:
 	joy = 0
+        discon = False 
 	#initializes the joystick module
 	def __init__(self):
-		pygame.joystick.init()
-		pygame.joystick.Joystick(0).init()
-		self.joy = pygame.joystick.Joystick(0)
+                self.tryConnect()
+        def tryConnect(self):
+                try:
+                    self.joy.get_axis(0)
+                    return True
+                except:
+                    try:
+                        pygame.joystick.quit()
+		        pygame.joystick.init()
+		        pygame.joystick.Joystick(0).init()
+		        self.joy = pygame.joystick.Joystick(0)
+                        self.Discon = False
+                        return True
+                    except Exception as ex:
+                        print(ex)
+                        self.Discon = True
+                        return False
 
 	#Returns the name of the joystick
 	def getName(self):
@@ -20,5 +35,8 @@ class JoystickReader:
 	
 	#returns the value of the axis number specified
 	def getAxis(self, axisnumber):
-		return self.joy.get_axis(axisnumber)
-	
+                try:
+	            return self.joy.get_axis(axisnumber)
+                except:
+                    return 0
+
